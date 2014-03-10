@@ -37,8 +37,6 @@ public class Main{
 		@Override
 		public void onFileFind(File file) {
 			try {
-				System.out.println("\n##########################################");
-				System.out.println("Java file: " + file.getAbsolutePath());
 				CompilationUnit compilationUnit = SourceCode.parse(file);
 				new MethodVisitor().visit(compilationUnit, null);
 			} catch (Exception e) {}
@@ -90,8 +88,10 @@ public class Main{
         public void visit(MethodDeclaration n, Object arg) {
            String body = n.getBody().toString();
            String[] tokens = SourceCode.tokenize(body);
-           String modelLine = SourceCode.representationOf(", ", tokens);
-           appendToOutput(modelLine);
+           if(tokens != null && tokens.length > 10){
+        	   String modelLine = SourceCode.representationOf(", ", tokens);
+               appendToOutput(modelLine);
+           }
         }
     }
 	
