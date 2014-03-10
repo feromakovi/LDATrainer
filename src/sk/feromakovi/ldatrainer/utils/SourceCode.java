@@ -20,8 +20,13 @@ import com.google.common.io.Files;
 
 public final class SourceCode {
 	
-	public static final CompilationUnit parse(final File file) throws Exception{
-		return JavaParser.parse(new FileInputStream(file));
+	public static final CompilationUnit parse(final File file){
+		CompilationUnit cu = null;
+		try{
+			cu = JavaParser.parse(new FileInputStream(file));
+			return cu;
+		}catch(Exception e){}
+		return null;
 	}
 	
 	public static final String representationOf(final String delimiter, final String... strings){

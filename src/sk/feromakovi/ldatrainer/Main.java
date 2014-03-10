@@ -37,8 +37,10 @@ public class Main{
 		@Override
 		public void onFileFind(File file) {
 			try {
+				System.out.println("onFileFind: " + file.getAbsolutePath());
 				CompilationUnit compilationUnit = SourceCode.parse(file);
-				new MethodVisitor().visit(compilationUnit, null);
+				if(compilationUnit != null)
+					new MethodVisitor().visit(compilationUnit, null);
 			} catch (Exception e) {}
 		}
 	};
@@ -86,12 +88,14 @@ public class Main{
 
         @Override
         public void visit(MethodDeclaration n, Object arg) {
-           String body = n.getBody().toString();
-           String[] tokens = SourceCode.tokenize(body);
-           if(tokens != null && tokens.length > 10){
-        	   String modelLine = SourceCode.representationOf(", ", tokens);
-               appendToOutput(modelLine);
-           }
+        	try{
+        		String body = n.getBody().toString();
+                String[] tokens = SourceCode.tokenize(body);
+                if(tokens != null && tokens.length > 10){
+             	   String modelLine = SourceCode.representationOf(", ", tokens);
+                    appendToOutput(modelLine);
+                }
+        	}catch(Exception e){}           
         }
     }
 	
