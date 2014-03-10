@@ -30,6 +30,10 @@ public final class FileFinder {
 		}
 	}
 	
+	public void find(String path){
+		this.find(new File(path));
+	}
+	
 	private boolean callbackListener(File file){
 		if(file != null && file.isFile()){
 			if(this.mListener != null)
