@@ -82,9 +82,9 @@ public final class FileFinder {
 		}
 	}
 	
-	public static void main(String... args){
+//	public static void main(String... args){
 //    	FileFinder ff = new FileFinder(FileFinder.PATTERN_JAVA);
 //    	ff.setFileFinderListener(sourceFile);
 //    	ff.find(new File(projectRes.getLocationURI().getPath()));
-	}
+//	}
 }
