@@ -11,8 +11,10 @@ import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+
 import uk.ac.open.crc.intt.IdentifierNameTokeniser;
 import uk.ac.open.crc.intt.IdentifierNameTokeniserFactory;
+
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 
@@ -20,6 +22,16 @@ public final class SourceCode {
 	
 	public static final CompilationUnit parse(final File file) throws Exception{
 		return JavaParser.parse(new FileInputStream(file));
+	}
+	
+	public static final String representationOf(final String delimiter, final String... strings){
+		StringBuilder builder = new StringBuilder();
+		for(int i = 0; i < strings.length; i++){
+			builder.append(strings[i]);
+			if(i < (strings.length -1))
+				builder.append(delimiter);
+		}
+		return builder.toString();
 	}
 	
 	public static final String[] tokenize(final File sourceFile){
@@ -48,7 +60,6 @@ public final class SourceCode {
 		if(tokenized.startsWith(" "))
 			tokenized = tokenized.replaceFirst(" ", "");		
 		return tokenized.split(" ");
-		
 	}
 	
 	public static void main(String... args) throws IOException{
@@ -57,9 +68,8 @@ public final class SourceCode {
 		for(String l : tokenize(code))
 			System.out.println(l);
 	}
-	
-	
-	private static final String SEPARATORS = "$_,-.:\"'(){}[]=<>;@+/*";
+		
+	private static final String SEPARATORS = "~^$&|?\\_,-.:\"'(){}[]=<>;%@+/*#!1234567890";
 	
 	private static final Set<String> WORDS = new HashSet<String>();
 	static{
@@ -122,5 +132,6 @@ public final class SourceCode {
 		WORDS.add("int");
 		WORDS.add("long");
 		WORDS.add("short");
+		WORDS.add("m");
 	}
 }
