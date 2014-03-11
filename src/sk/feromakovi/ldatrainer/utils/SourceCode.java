@@ -61,6 +61,7 @@ public final class SourceCode {
 		Iterator<String> iterator = WORDS.iterator();
 		while(iterator.hasNext())
 			tokenized = tokenized.replaceAll("\\b" + iterator.next() + "\\b", "");
+		tokenized = tokenized.replaceAll("\\b[^\\s]\\b", "");
 		tokenized = tokenized.replaceAll("\\s+", " ");
 		if(tokenized.startsWith(" "))
 			tokenized = tokenized.replaceFirst(" ", "");		
@@ -138,5 +139,6 @@ public final class SourceCode {
 		WORDS.add("long");
 		WORDS.add("short");
 		WORDS.add("m");
+		WORDS.add("var");
 	}
 }
