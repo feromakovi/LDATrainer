@@ -1,8 +1,10 @@
 package sk.feromakovi.ldatrainer;
 
 import japa.parser.ast.CompilationUnit;
+import japa.parser.ast.body.ClassOrInterfaceDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -11,10 +13,12 @@ import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
+
 import sk.feromakovi.ldatrainer.utils.FileFinder;
 import sk.feromakovi.ldatrainer.utils.FileFinder.FileFinderListener;
 import sk.feromakovi.ldatrainer.utils.SourceCode;
@@ -40,7 +44,7 @@ public class Main{
 				System.out.println("onFileFind: " + file.getAbsolutePath());
 				CompilationUnit compilationUnit = SourceCode.parse(file);
 				if(compilationUnit != null)
-					new MethodVisitor().visit(compilationUnit, null);
+					new ClassVisitor().visit(compilationUnit, null);
 			} catch (Exception e) {}
 		}
 	};
@@ -84,19 +88,18 @@ public class Main{
 		}    	
 	}
 	
-	private class MethodVisitor extends VoidVisitorAdapter {
-
-        @Override
-        public void visit(MethodDeclaration n, Object arg) {
+	private class ClassVisitor extends VoidVisitorAdapter {
+		@Override
+		public void visit(ClassOrInterfaceDeclaration n, Object arg) {
         	try{
-        		String body = n.getBody().toString();
-                String[] tokens = SourceCode.tokenize(body);
-                if(tokens != null && tokens.length > 10){
-             	   String modelLine = SourceCode.representationOf(", ", tokens);
-                    appendToOutput(modelLine);
-                }
-        	}catch(Exception e){}           
-        }
+        		String body = n.toString();
+        		String[] tokens = SourceCode.tokenize(body);
+        		if(tokens != null && tokens.length > 10){
+        			String modelLine = SourceCode.representationOf(" ", tokens);
+        			appendToOutput(modelLine.toLowerCase());
+        		}
+        	}catch(Exception e){}        
+		}       
     }
 	
 	private void appendToOutput(final String line){
