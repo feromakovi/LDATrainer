@@ -34,6 +34,9 @@ public class Main{
 	@Option(name="-o")     
     private String o = "output.txt";
 	
+	@Option(name="-v")     
+    private boolean v = false;
+	
 	private long mEntriesCount = 0;
 	
 	FileFinderListener fileFinderListener = new FileFinderListener() {
@@ -41,7 +44,7 @@ public class Main{
 		@Override
 		public void onFileFind(File file) {
 			try {
-				System.out.println("onFileFind: " + file.getAbsolutePath());
+				log("onFileFind: " + file.getAbsolutePath());
 				CompilationUnit compilationUnit = SourceCode.parse(file);
 				if(compilationUnit != null)
 					new ClassVisitor().visit(compilationUnit, null);
@@ -113,6 +116,11 @@ public class Main{
 			   e.printStackTrace();
 			}
 		}
+	}
+	
+	public void log(String log){
+		if(this.v)
+			System.out.println(log);
 	}
 	
 	public static void main(String[] args) {
