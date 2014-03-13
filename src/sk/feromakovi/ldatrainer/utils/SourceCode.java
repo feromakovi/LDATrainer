@@ -11,6 +11,8 @@ import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import uk.ac.open.crc.intt.IdentifierNameTokeniser;
 import uk.ac.open.crc.intt.IdentifierNameTokeniserFactory;
@@ -19,6 +21,8 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 
 public final class SourceCode {
+	
+	static Pattern mPackagePattern = Pattern.compile("package (.*?);");
 	
 	public static final CompilationUnit parse(final File file){
 		CompilationUnit cu = null;
@@ -49,6 +53,23 @@ public final class SourceCode {
 		return tokens;
 	}
 	
+	public static final String extractPackage(final File sourceFile){
+		String extractedPackage = null;
+		try {
+			extractedPackage = extractPackage(Files.toString(sourceFile, Charsets.UTF_8));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return extractedPackage;
+	}
+	
+	public static final String extractPackage(final String text){
+		Matcher matcher = mPackagePattern.matcher(text);
+		if(matcher.find())
+			return matcher.group(1);
+		return null;
+	}
+	
 	public static final String[] tokenize(final String sourceCode){ //sourceCode.replaceAll("[(){}\n\",._':;?&!=@+/*<>]", " ").replaceAll("\\s+", " ").split("\\s");
 		IdentifierNameTokeniserFactory factory = new IdentifierNameTokeniserFactory();
 		factory.setSeparatorCharacters(SEPARATORS);
@@ -70,9 +91,9 @@ public final class SourceCode {
 	
 	public static void main(String... args) throws IOException{
 		String code = Files.toString(Paths.get("/Users/feromakovi/Desktop/token.java").toFile(), Charset.defaultCharset());
-		
-		for(String l : tokenize(code))
-			System.out.println(l);
+//		System.out.println(extractPackage(code));
+//		for(String l : tokenize(code))
+//			System.out.println(l);
 	}
 		
 	private static final String SEPARATORS = "~^$&|?\\_,-.:\"'(){}[]=<>;%@+/*#!1234567890";
