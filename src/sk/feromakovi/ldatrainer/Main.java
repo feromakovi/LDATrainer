@@ -2,7 +2,6 @@ package sk.feromakovi.ldatrainer;
 
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
-import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
 
 import java.io.BufferedWriter;
@@ -12,7 +11,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
@@ -23,46 +24,37 @@ import sk.feromakovi.ldatrainer.utils.FileFinder;
 import sk.feromakovi.ldatrainer.utils.FileFinder.FileFinderListener;
 import sk.feromakovi.ldatrainer.utils.SourceCode;
 
-public class Main{
+public class Main implements FileFinderListener{
 	
 	private static final int MIN_TOKENS_COUNT = 10;
 	
     @Argument
-    private List<String> arguments = new ArrayList<String>();
+    private List<String> mArguments = new ArrayList<String>();
 	
 	@Option(name="-p")     
-    private String p = ".";
+    private String mPath = ".";
 	
 	@Option(name="-o")     
-    private String o = "output.txt";
+    private String mOutputFile = "output.txt";
 	
 	@Option(name="-v")     
-    private boolean v = false;
+    private boolean mVerbose = false;
 	
-	@Option(name="--package")     
-    private boolean mPackage = false;
+	@Option(name="-s")     
+    private boolean mStatistic = false;
+	
+	private long mFoundClassCount = 0;
 	
 	private long mEntriesCount = 0;
 	
-	FileFinderListener fileFinderListener = new FileFinderListener() {
-		
-		@Override
-		public void onFileFind(File file) {
-			try {
-				log("onFileFind: " + file.getAbsolutePath());
-				CompilationUnit compilationUnit = SourceCode.parse(file);
-				if(compilationUnit != null)
-					new ClassVisitor().visit(compilationUnit, null);
-			} catch (Exception e) {}
-		}
-	};
+	private Set<String> mPackages = new HashSet<String>();
 	
 	public Main(String[] args){
 		CmdLineParser parser = new CmdLineParser(this);
         parser.setUsageWidth(80);
         try {
             parser.parseArgument(args);            
-            if( arguments.isEmpty() )
+            if( mArguments.isEmpty() )
                 throw new IllegalArgumentException("No argument is given");
         } catch( CmdLineException | IllegalArgumentException e ) {
             return;
@@ -70,30 +62,64 @@ public class Main{
 	}
 	
 	public void proceed(){
-		File out = new File(o); 
+		File out = new File(mOutputFile); 
 		if(out.exists())
 			out.delete();
 		try{
 			out.createNewFile();
-		}catch(Exception e){
-			e.printStackTrace();
-		}		
+		}catch(Exception e){e.printStackTrace();}		
 		
 		FileFinder fileFinder = new FileFinder(FileFinder.PATTERN_JAVA);
     	fileFinder.setRecursive(true);
-    	fileFinder.setFileFinderListener(fileFinderListener);
-    	fileFinder.find(p);
+    	fileFinder.setFileFinderListener(this);
+    	fileFinder.find(mPath);
     	
     	RandomAccessFile f;
 		try {
-			f = new RandomAccessFile(new File(o), "rw");
+			f = new RandomAccessFile(new File(mOutputFile), "rw");
 			f.seek(0); 
 	    	f.write(new String(Long.toString(mEntriesCount) + "\n").getBytes());
 	    	f.close();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}    	
+		} catch (Exception e) {e.printStackTrace();}  
+		if(mStatistic){
+			this.mVerbose = Boolean.TRUE;
+			log("All packages: " + this.mPackages.size());
+			log("All classes: " + this.mFoundClassCount);
+			log("Used classes: " + mEntriesCount);
+		}			
+	}
+	
+	@Override
+	public void onFileFind(File file) {
+		try {
+			log(file.getAbsolutePath());
+			if(mStatistic){
+				String pckg = SourceCode.extractPackage(file);
+				mPackages.add(pckg);
+				mFoundClassCount++;
+			}
+			CompilationUnit compilationUnit = SourceCode.parse(file);
+			if(compilationUnit != null)
+				new ClassVisitor().visit(compilationUnit, null);			
+		} catch (Exception e) {}
+	}
+	
+	private void appendToOutput(final String line){
+		if(line != null && line.length() > 0){
+			try {
+			    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(mOutputFile, true)));
+			    out.println(line);
+			    out.close();
+			    mEntriesCount++;
+			} catch (IOException e) {
+			   e.printStackTrace();
+			}
+		}
+	}
+	
+	public void log(String log){
+		if(this.mVerbose)
+			System.out.println(log);
 	}
 	
 	private class ClassVisitor extends VoidVisitorAdapter {
@@ -110,26 +136,8 @@ public class Main{
 		}       
     }
 	
-	private void appendToOutput(final String line){
-		if(line != null && line.length() > 0){
-			try {
-			    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(o, true)));
-			    out.println(line);
-			    out.close();
-			    mEntriesCount++;
-			} catch (IOException e) {
-			   e.printStackTrace();
-			}
-		}
-	}
-	
-	public void log(String log){
-		if(this.v)
-			System.out.println(log);
-	}
-	
 	public static void main(String[] args) {
     	Main main = new Main(args);
     	main.proceed();    	
-	}
+	}	
 }
