@@ -25,6 +25,8 @@ import sk.feromakovi.ldatrainer.utils.SourceCode;
 
 public class Main{
 	
+	private static final int MIN_TOKENS_COUNT = 10;
+	
     @Argument
     private List<String> arguments = new ArrayList<String>();
 	
@@ -36,6 +38,9 @@ public class Main{
 	
 	@Option(name="-v")     
     private boolean v = false;
+	
+	@Option(name="--package")     
+    private boolean mPackage = false;
 	
 	private long mEntriesCount = 0;
 	
@@ -97,7 +102,7 @@ public class Main{
         	try{
         		String body = n.toString();
         		String[] tokens = SourceCode.tokenize(body);
-        		if(tokens != null && tokens.length > 10){
+        		if(tokens != null && tokens.length > MIN_TOKENS_COUNT){
         			String modelLine = SourceCode.representationOf(" ", tokens);
         			appendToOutput(modelLine.toLowerCase());
         		}
