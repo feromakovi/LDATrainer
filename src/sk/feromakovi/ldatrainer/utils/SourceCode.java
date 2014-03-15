@@ -22,6 +22,7 @@ import com.google.common.io.Files;
 
 public final class SourceCode {
 	
+	private static final String SEPARATORS = "~^$&|?\\_,-.:\"'(){}[]=<>;%@+/*#!1234567890";
 	static Pattern mPackagePattern = Pattern.compile("package (.*?);");
 	
 	public static final CompilationUnit parse(final File file){
@@ -79,7 +80,7 @@ public final class SourceCode {
 		for(String t : tokens)
 			builder.append(t + " ");		
 		String tokenized = builder.toString().replaceAll("\n", " ");
-		Iterator<String> iterator = WORDS.iterator();
+		Iterator<String> iterator = StopWords.ALL.iterator();
 		while(iterator.hasNext())
 			tokenized = tokenized.replaceAll("\\b" + iterator.next() + "\\b", "");
 		tokenized = tokenized.replaceAll("\\b[^\\s]\\b", "");
@@ -96,70 +97,5 @@ public final class SourceCode {
 //			System.out.println(l);
 	}
 		
-	private static final String SEPARATORS = "~^$&|?\\_,-.:\"'(){}[]=<>;%@+/*#!1234567890";
 	
-	private static final Set<String> WORDS = new HashSet<String>();
-	static{
-		WORDS.add("get");
-		WORDS.add("set");
-		WORDS.add("to");
-		WORDS.add("new");
-		WORDS.add("public");
-		WORDS.add("private");
-		WORDS.add("protected");
-		WORDS.add("static");
-		WORDS.add("final");
-		WORDS.add("synchronized");
-		WORDS.add("volatile");
-		WORDS.add("transient");
-		WORDS.add("final");
-		WORDS.add("void");
-		WORDS.add("abstract");
-		WORDS.add("instanceof");
-		WORDS.add("try");
-		WORDS.add("catch");
-		WORDS.add("finally");
-		WORDS.add("import");
-		WORDS.add("return");
-		WORDS.add("super");
-		WORDS.add("for");
-		WORDS.add("do");
-		WORDS.add("while");
-		WORDS.add("repeat");
-		WORDS.add("until");
-		WORDS.add("if");
-		WORDS.add("else");
-		WORDS.add("class");
-		WORDS.add("true");
-		WORDS.add("false");
-		WORDS.add("assert");
-		WORDS.add("break");
-		WORDS.add("case");
-		WORDS.add("const");
-		WORDS.add("continue");
-		WORDS.add("default");
-		WORDS.add("enum");
-		WORDS.add("extends");
-		WORDS.add("goto");
-		WORDS.add("implements");
-		WORDS.add("interface");
-		WORDS.add("native");
-		WORDS.add("null");
-		WORDS.add("package");
-		WORDS.add("strictfp");
-		WORDS.add("switch");
-		WORDS.add("this");
-		WORDS.add("throw");
-		WORDS.add("throws");
-		WORDS.add("boolean");
-		WORDS.add("byte");
-		WORDS.add("char");
-		WORDS.add("double");
-		WORDS.add("float");
-		WORDS.add("int");
-		WORDS.add("long");
-		WORDS.add("short");
-		WORDS.add("m");
-		WORDS.add("var");
-	}
 }
