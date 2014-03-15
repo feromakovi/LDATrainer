@@ -1,5 +1,6 @@
 package sk.feromakovi.ldatrainer;
 
+import static org.kohsuke.args4j.ExampleMode.ALL;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
@@ -31,17 +32,20 @@ public class Main implements FileFinderListener{
     @Argument
     private List<String> mArguments = new ArrayList<String>();
 	
-	@Option(name="-p")     
+	@Option(name="-p", usage="path where should start finding")     
     private String mPath = ".";
 	
-	@Option(name="-o")     
+	@Option(name="-o", usage = "output file")     
     private String mOutputFile = "output.txt";
 	
-	@Option(name="-v")     
+	@Option(name="-v", usage = "verbose mode, allows print more information to console")     
     private boolean mVerbose = false;
 	
-	@Option(name="-s")     
+	@Option(name="-s", usage = "print statistic in the end")     
     private boolean mStatistic = false;
+	
+	@Option(name="-h", usage = "help")     
+    private boolean mHelp = false;
 	
 	private long mFoundClassCount = 0;
 	
@@ -56,6 +60,7 @@ public class Main implements FileFinderListener{
             parser.parseArgument(args);            
             if( mArguments.isEmpty() )
                 throw new IllegalArgumentException("No argument is given");
+            handleHelp(parser);
         } catch( CmdLineException | IllegalArgumentException e ) {
             return;
         }        
@@ -120,6 +125,15 @@ public class Main implements FileFinderListener{
 	public void log(String log){
 		if(this.mVerbose)
 			System.out.println(log);
+	}
+	
+	private boolean handleHelp(CmdLineParser parser){
+		if(this.mHelp){
+			parser.printUsage(System.err);
+	        System.err.println();
+	        System.err.println("  Example: java SampleMain"+parser.printExample(ALL));
+		}
+		return this.mHelp;
 	}
 	
 	private class ClassVisitor extends VoidVisitorAdapter {
