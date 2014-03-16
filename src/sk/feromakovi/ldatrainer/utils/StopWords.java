@@ -75,6 +75,7 @@ public final class StopWords {
 		JAVA.add("var");
 		JAVA.add("string");
 		JAVA.add("override");
+		JAVA.add("exception");
 		
 		//Add stop words from English natural language to Set
 		ENGLISH.add("able");
