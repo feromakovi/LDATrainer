@@ -79,10 +79,10 @@ public final class SourceCode {
 		StringBuilder builder = new StringBuilder();
 		for(String t : tokens)
 			builder.append(t + " ");		
-		String tokenized = builder.toString().replaceAll("\n", " ");
+		String tokenized = builder.toString().replaceAll("\n", " ").toLowerCase();
 		Iterator<String> iterator = StopWords.ALL.iterator();
 		while(iterator.hasNext())
-			tokenized = tokenized.replaceAll("\\b" + iterator.next() + "\\b", "");
+			tokenized = tokenized.replaceAll("\\b" + iterator.next().toLowerCase() + "\\b", "");
 		tokenized = tokenized.replaceAll("\\b[^\\s]\\b", "");
 		tokenized = tokenized.replaceAll("\\s+", " ");
 		if(tokenized.startsWith(" "))
@@ -96,6 +96,4 @@ public final class SourceCode {
 //		for(String l : tokenize(code))
 //			System.out.println(l);
 	}
-		
-	
 }

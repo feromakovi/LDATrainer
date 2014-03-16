@@ -13,6 +13,7 @@ public final class StopWords {
 		//Add stop words from Java syntax to Set
 		JAVA.add("get");
 		JAVA.add("set");
+		JAVA.add("add");
 		JAVA.add("to");
 		JAVA.add("new");
 		JAVA.add("public");
@@ -72,6 +73,8 @@ public final class StopWords {
 		JAVA.add("short");
 		JAVA.add("m");
 		JAVA.add("var");
+		JAVA.add("string");
+		JAVA.add("override");
 		
 		//Add stop words from English natural language to Set
 		ENGLISH.add("able");
@@ -451,6 +454,7 @@ public final class StopWords {
 		ENGLISH.add("ought");
 		ENGLISH.add("oughtn't");
 		ENGLISH.add("our");
+		ENGLISH.add("org");
 		ENGLISH.add("ours");
 		ENGLISH.add("ourselves");
 		ENGLISH.add("out");
