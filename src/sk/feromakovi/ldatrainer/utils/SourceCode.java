@@ -84,6 +84,7 @@ public final class SourceCode {
 		while(iterator.hasNext())
 			tokenized = tokenized.replaceAll("\\b" + iterator.next().toLowerCase() + "\\b", "");
 		tokenized = tokenized.replaceAll("\\b[^\\s]\\b", "");
+		tokenized = tokenized.replaceAll("\\b.{2}\\b", "");
 		tokenized = tokenized.replaceAll("\\s+", " ");
 		if(tokenized.startsWith(" "))
 			tokenized = tokenized.replaceFirst(" ", "");		
@@ -91,7 +92,7 @@ public final class SourceCode {
 	}
 	
 	public static void main(String... args) throws IOException{
-		String code = Files.toString(Paths.get("/Users/feromakovi/Desktop/token.java").toFile(), Charset.defaultCharset());
+		String code = Files.toString(Paths.get("/Users/feromakovi/Desktop/token.j").toFile(), Charset.defaultCharset());
 //		System.out.println(extractPackage(code));
 //		for(String l : tokenize(code))
 //			System.out.println(l);
