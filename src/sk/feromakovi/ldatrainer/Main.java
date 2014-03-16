@@ -60,7 +60,6 @@ public class Main implements FileFinderListener{
             parser.parseArgument(args);            
             if( mArguments.isEmpty() )
                 throw new IllegalArgumentException("No argument is given");
-            handleHelp(parser);
         } catch( CmdLineException | IllegalArgumentException e ) {
             return;
         }        
@@ -127,11 +126,13 @@ public class Main implements FileFinderListener{
 			System.out.println(log);
 	}
 	
-	private boolean handleHelp(CmdLineParser parser){
+	private boolean handleHelp(){
 		if(this.mHelp){
-			parser.printUsage(System.err);
-	        System.err.println();
-	        System.err.println("  Example: java SampleMain"+parser.printExample(ALL));
+	       System.out.println("[-p] path where should start finding");
+	       System.out.println("[-o] output file");
+	       System.out.println("[-v] verbose mode, allows print more information to console");
+	       System.out.println("[-s] print statistic in the end");
+	       System.out.println("[-h] help");
 		}
 		return this.mHelp;
 	}
@@ -152,6 +153,7 @@ public class Main implements FileFinderListener{
 	
 	public static void main(String[] args) {
     	Main main = new Main(args);
-    	main.proceed();    	
+    	if(!main.handleHelp())
+    		main.proceed();    	
 	}	
 }
