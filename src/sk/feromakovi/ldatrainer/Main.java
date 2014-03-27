@@ -1,9 +1,6 @@
 package sk.feromakovi.ldatrainer;
 
-import static org.kohsuke.args4j.ExampleMode.ALL;
 import japa.parser.ast.CompilationUnit;
-import japa.parser.ast.body.ClassOrInterfaceDeclaration;
-import japa.parser.ast.visitor.VoidVisitorAdapter;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -21,13 +18,12 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
+import sk.feromakovi.ldatrainer.utils.ClassVisitor;
 import sk.feromakovi.ldatrainer.utils.FileFinder;
 import sk.feromakovi.ldatrainer.utils.FileFinder.FileFinderListener;
 import sk.feromakovi.ldatrainer.utils.SourceCode;
 
 public class Main implements FileFinderListener{
-	
-	private static final int MIN_TOKENS_COUNT = 10;
 	
     @Argument
     private List<String> mArguments = new ArrayList<String>();
@@ -52,6 +48,8 @@ public class Main implements FileFinderListener{
 	private long mEntriesCount = 0;
 	
 	private Set<String> mPackages = new HashSet<String>();
+	
+	private ClassVisitor mClassVisitor = new ClassVisitor();
 	
 	public Main(String[] args){
 		CmdLineParser parser = new CmdLineParser(this);
@@ -103,8 +101,11 @@ public class Main implements FileFinderListener{
 				mFoundClassCount++;
 			}
 			CompilationUnit compilationUnit = SourceCode.parse(file);
-			if(compilationUnit != null)
-				new ClassVisitor().visit(compilationUnit, null);			
+			if(compilationUnit != null){
+				mClassVisitor.reset(compilationUnit);
+				appendToOutput(mClassVisitor.getParsedCode());
+			}
+							
 		} catch (Exception e) {}
 	}
 	
@@ -136,20 +137,6 @@ public class Main implements FileFinderListener{
 		}
 		return this.mHelp;
 	}
-	
-	private class ClassVisitor extends VoidVisitorAdapter {
-		@Override
-		public void visit(ClassOrInterfaceDeclaration n, Object arg) {
-        	try{
-        		String body = n.toString();
-        		String[] tokens = SourceCode.tokenize(body);
-        		if(tokens != null && tokens.length > MIN_TOKENS_COUNT){
-        			String modelLine = SourceCode.representationOf(" ", tokens);
-        			appendToOutput(modelLine.toLowerCase());
-        		}
-        	}catch(Exception e){}        
-		}       
-    }
 	
 	public static void main(String[] args) {
     	Main main = new Main(args);
