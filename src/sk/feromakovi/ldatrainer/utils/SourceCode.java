@@ -8,7 +8,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -78,22 +77,34 @@ public final class SourceCode {
 		String[] tokens = tokeniser.tokenise(sourceCode);
 		StringBuilder builder = new StringBuilder();
 		for(String t : tokens)
-			builder.append(t + " ");		
+			if(t != null && t.length() > 2)
+				builder.append(t + " ");		
 		String tokenized = builder.toString().replaceAll("\n", " ").toLowerCase();
-		Iterator<String> iterator = StopWords.ALL.iterator();
+		Iterator<String> iterator = StopWords.ENGLISH.iterator();
 		while(iterator.hasNext())
 			tokenized = tokenized.replaceAll("\\b" + iterator.next().toLowerCase() + "\\b", "");
-		tokenized = tokenized.replaceAll("\\b[^\\s]\\b", "");
-		tokenized = tokenized.replaceAll("\\b.{2}\\b", "");
+//		tokenized = tokenized.replaceAll("\\b[^\\s]\\b", ""); //remove all one character words
+//		tokenized = tokenized.replaceAll("\\b.{2}\\b", ""); //remove all two characters words
 		tokenized = tokenized.replaceAll("\\s+", " ");
 		if(tokenized.startsWith(" "))
 			tokenized = tokenized.replaceFirst(" ", "");		
 		return tokenized.split(" ");
 	}
 	
+	public static final String removeSeparators(final String code){
+        return code.replaceAll("[~^$&|?\\_,-\\.:\"'(){}\\[\\]=<>;%@+/*#!]", " ").replaceAll("\\b[^\\s]\\b", "").replaceAll("\\b.{2}\\b", "").replaceAll("\\s+", " ").toLowerCase();
+	}
+	
+	public static final String removeSet(String code, Set<String> words){
+		Iterator<String> iterator = words.iterator();
+		while(iterator.hasNext())
+			code = code.replaceAll("\\b" + iterator.next().toLowerCase() + "\\b", "");
+		return code.replaceAll("\\s+", " ");
+	}
+	
 	public static void main(String... args) throws IOException{
 		String code = Files.toString(Paths.get("/Users/feromakovi/Desktop/token.j").toFile(), Charset.defaultCharset());
-//		System.out.println(extractPackage(code));
+		System.out.println(removeSeparators(code));
 //		for(String l : tokenize(code))
 //			System.out.println(l);
 	}
