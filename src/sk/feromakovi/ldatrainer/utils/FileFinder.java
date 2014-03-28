@@ -78,6 +78,8 @@ public final class FileFinder {
 			File f = new File(dir, name);
 			if(f.isFile() && this.mPattern != null && !name.matches(mPattern))
 				return false;
+			else if(f.isDirectory() && !mRecursive)
+				return false;
 			return true;
 		}
 	}

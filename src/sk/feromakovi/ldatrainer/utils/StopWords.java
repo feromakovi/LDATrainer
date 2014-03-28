@@ -71,7 +71,6 @@ public final class StopWords {
 		JAVA.add("int");
 		JAVA.add("long");
 		JAVA.add("short");
-		JAVA.add("m");
 		JAVA.add("var");
 		JAVA.add("string");
 		JAVA.add("override");
@@ -87,6 +86,7 @@ public final class StopWords {
 		ENGLISH.add("across");
 		ENGLISH.add("actually");
 		ENGLISH.add("adj");
+		ENGLISH.add("add");
 		ENGLISH.add("after");
 		ENGLISH.add("afterwards");
 		ENGLISH.add("again");
@@ -514,6 +514,7 @@ public final class StopWords {
 		ENGLISH.add("sent");
 		ENGLISH.add("serious");
 		ENGLISH.add("seriously");
+		ENGLISH.add("set");
 		ENGLISH.add("seven");
 		ENGLISH.add("several");
 		ENGLISH.add("shall");

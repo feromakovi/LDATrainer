@@ -104,8 +104,7 @@ public class Main implements FileFinderListener{
 			if(compilationUnit != null){
 				mClassVisitor.reset(compilationUnit);
 				appendToOutput(mClassVisitor.getParsedCode());
-			}
-							
+			}							
 		} catch (Exception e) {}
 	}
 	
