@@ -75,13 +75,9 @@ public final class SourceCode {
 		factory.setSeparatorCharacters(SEPARATORS);
 		IdentifierNameTokeniser tokeniser = factory.create();
 		String[] tokens = tokeniser.tokenise(sourceCode);
-		StringBuilder builder = new StringBuilder();
-		for(String t : tokens)
-			if(t != null && t.length() > 2)
-				builder.append(t + " ");				
-		String tokenized = removeSet(builder.toString().replaceAll("\n", " "), StopWords.ENGLISH, true); 
-//		tokenized = tokenized.replaceAll("\\b[^\\s]\\b", ""); //remove all one character words
-//		tokenized = tokenized.replaceAll("\\b.{2}\\b", ""); //remove all two characters words
+		String tokenized = removeSet(representationOf(" ", tokens).replaceAll("\n", " "), StopWords.ENGLISH, true); 
+		tokenized = tokenized.replaceAll("\\b[^\\s]\\b", ""); //remove all one character words
+		tokenized = tokenized.replaceAll("\\b.{2}\\b", ""); //remove all two characters words
 		tokenized = tokenized.replaceAll("\\s+", " ");
 		if(tokenized.startsWith(" "))
 			tokenized = tokenized.replaceFirst(" ", "");		
