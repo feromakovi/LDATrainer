@@ -101,7 +101,14 @@ public final class SourceCode {
 	
 	public static void main(String... args) throws IOException{
 		String code = Files.toString(Paths.get("/Users/feromakovi/Desktop/token.j").toFile(), Charset.defaultCharset());
-		System.out.println(removeSeparators(code));
+//		final String originalCode = code;
+//		final String noJavaCode = SourceCode.removeSet(SourceCode.removeSeparators(originalCode), StopWords.JAVA, false);
+//		final String[] tokens = SourceCode.tokenize(noJavaCode);
+//		if (tokens != null && tokens.length > 10) {
+//			code = SourceCode.representationOf(" ", tokens);
+//		}
+//		
+//		System.out.println(code);
 //		for(String l : tokenize(code))
 //			System.out.println(l);
 	}

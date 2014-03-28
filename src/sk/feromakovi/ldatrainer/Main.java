@@ -94,13 +94,13 @@ public class Main implements FileFinderListener{
 	@Override
 	public void onFileFind(File file) {
 		try {
-			log(file.getAbsolutePath());
 			if(mStatistic){
 				String pckg = SourceCode.extractPackage(file);
 				mPackages.add(pckg);
 				mFoundClassCount++;
 			}
 			CompilationUnit compilationUnit = SourceCode.parse(file);
+			log(file.getAbsolutePath() + "  " + ((compilationUnit != null) ? "OK" : "FAIL"));
 			if(compilationUnit != null){
 				mClassVisitor.reset(compilationUnit);
 				appendToOutput(mClassVisitor.getParsedCode());
