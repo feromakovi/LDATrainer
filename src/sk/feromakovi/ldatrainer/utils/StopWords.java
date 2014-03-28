@@ -44,7 +44,9 @@ public final class StopWords {
 		JAVA.add("else");
 		JAVA.add("class");
 		JAVA.add("true");
+		JAVA.add("TRUE");
 		JAVA.add("false");
+		JAVA.add("FALSE");
 		JAVA.add("assert");
 		JAVA.add("break");
 		JAVA.add("case");
