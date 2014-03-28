@@ -26,7 +26,7 @@ public class ClassVisitor extends VoidVisitorAdapter {
 	public void visit(ClassOrInterfaceDeclaration n, Object arg){
 		try{
 			final String originalCode = n.toString();
-			final String noJavaCode = SourceCode.removeSet(SourceCode.removeSeparators(originalCode), StopWords.JAVA);
+			final String noJavaCode = SourceCode.removeSet(SourceCode.removeSeparators(originalCode), StopWords.JAVA, false);
 			final String[] tokens = SourceCode.tokenize(noJavaCode);
 			if (tokens != null && tokens.length > MIN_TOKENS_COUNT) {
 				this.mCode = SourceCode.representationOf(" ", tokens);

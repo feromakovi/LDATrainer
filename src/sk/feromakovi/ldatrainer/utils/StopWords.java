@@ -26,6 +26,7 @@ public final class StopWords {
 		JAVA.add("transient");
 		JAVA.add("final");
 		JAVA.add("void");
+		JAVA.add("Void");
 		JAVA.add("abstract");
 		JAVA.add("instanceof");
 		JAVA.add("try");
@@ -64,17 +65,26 @@ public final class StopWords {
 		JAVA.add("throw");
 		JAVA.add("throws");
 		JAVA.add("boolean");
+		JAVA.add("Boolean");
 		JAVA.add("byte");
+		JAVA.add("Byte");
 		JAVA.add("char");
+		JAVA.add("Char");
 		JAVA.add("double");
+		JAVA.add("Double");
 		JAVA.add("float");
+		JAVA.add("Float");
 		JAVA.add("int");
+		JAVA.add("Integer");
 		JAVA.add("long");
+		JAVA.add("Long");
 		JAVA.add("short");
+		JAVA.add("Short");
 		JAVA.add("var");
-		JAVA.add("string");
+		JAVA.add("String");
 		JAVA.add("override");
-		JAVA.add("exception");
+		JAVA.add("Override");
+		JAVA.add("Exception");
 		
 		//Add stop words from English natural language to Set
 		ENGLISH.add("able");

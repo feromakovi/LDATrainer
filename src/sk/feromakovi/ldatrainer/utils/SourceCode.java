@@ -78,11 +78,8 @@ public final class SourceCode {
 		StringBuilder builder = new StringBuilder();
 		for(String t : tokens)
 			if(t != null && t.length() > 2)
-				builder.append(t + " ");		
-		String tokenized = builder.toString().replaceAll("\n", " ").toLowerCase();
-		Iterator<String> iterator = StopWords.ENGLISH.iterator();
-		while(iterator.hasNext())
-			tokenized = tokenized.replaceAll("\\b" + iterator.next().toLowerCase() + "\\b", "");
+				builder.append(t + " ");				
+		String tokenized = removeSet(builder.toString().replaceAll("\n", " "), StopWords.ENGLISH, true); 
 //		tokenized = tokenized.replaceAll("\\b[^\\s]\\b", ""); //remove all one character words
 //		tokenized = tokenized.replaceAll("\\b.{2}\\b", ""); //remove all two characters words
 		tokenized = tokenized.replaceAll("\\s+", " ");
@@ -92,13 +89,17 @@ public final class SourceCode {
 	}
 	
 	public static final String removeSeparators(final String code){
-        return code.replaceAll("[~^$&|?\\_,-\\.:\"'(){}\\[\\]=<>;%@+/*#!]", " ").replaceAll("\\b[^\\s]\\b", "").replaceAll("\\b.{2}\\b", "").replaceAll("\\s+", " ").toLowerCase();
+        return code.replaceAll("[~^$&|?\\_,-\\.:\"'(){}\\[\\]=<>;%@+/*#!]", " ");
 	}
 	
-	public static final String removeSet(String code, Set<String> words){
+	public static final String removeSet(String code, Set<String> words, boolean ignoreCase){
+		if(ignoreCase)
+			code = code.toLowerCase();
 		Iterator<String> iterator = words.iterator();
-		while(iterator.hasNext())
-			code = code.replaceAll("\\b" + iterator.next().toLowerCase() + "\\b", "");
+		while(iterator.hasNext()){
+			String replacement = (ignoreCase) ? iterator.next().toLowerCase() : iterator.next();
+			code = code.replaceAll("\\b" + replacement + "\\b", "");
+		}			
 		return code.replaceAll("\\s+", " ");
 	}
 	
