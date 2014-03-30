@@ -18,6 +18,7 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
+import sk.feromakovi.ldatrainer.models.Term;
 import sk.feromakovi.ldatrainer.utils.ClassVisitor;
 import sk.feromakovi.ldatrainer.utils.FileFinder;
 import sk.feromakovi.ldatrainer.utils.FileFinder.FileFinderListener;
@@ -88,7 +89,12 @@ public class Main implements FileFinderListener{
 			log("All packages: " + this.mPackages.size());
 			log("All classes: " + this.mFoundClassCount);
 			log("Used classes: " + mEntriesCount);
-		}			
+		}	
+		
+		log("------ Terms frequency-----");
+		for(Term term : this.mClassVisitor.getTermFrequency()){
+			log(term + " " + term.getFrequency());
+		}
 	}
 	
 	@Override
