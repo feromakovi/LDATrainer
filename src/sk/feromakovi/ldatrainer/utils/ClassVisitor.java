@@ -37,10 +37,12 @@ public class ClassVisitor extends VoidVisitorAdapter {
 		try{
 			final String originalCode = n.toString();
 			final String noJavaCode = SourceCode.removeSet(SourceCode.removeSeparators(originalCode), StopWords.JAVA, false); //Not ignore case because of INTT - it won't separate words 
-			final String[] tokens = SourceCode.tokenize(noJavaCode);
+			String[] tokens = SourceCode.tokenize(noJavaCode);
+			if(tokens != null)
+				tokens = SourceCode.removeSet(SourceCode.representationOf(" ", tokens), StopWords.OFTEN, true).split(" ");
 			if (tokens != null && tokens.length > MIN_TOKENS_COUNT) {
 				updateTermFrequency(tokens);
-				this.mCode = SourceCode.removeSet(SourceCode.representationOf(" ", tokens), StopWords.OFTEN, true);
+				this.mCode = SourceCode.representationOf(" ", tokens);
 			}
 		}catch(Exception e){}
 	}

@@ -1686,6 +1686,7 @@ public final class StopWords {
 		OFTEN.add("info");
 		OFTEN.add("size");
 		OFTEN.add("field");
+		OFTEN.add("assert");
 		OFTEN.add("index");
 		OFTEN.add("file");
 		OFTEN.add("text");
