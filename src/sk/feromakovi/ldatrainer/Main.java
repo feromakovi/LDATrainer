@@ -142,7 +142,7 @@ public class Main implements FileFinderListener{
 	       System.out.println("[-o] output file");
 	       System.out.println("[-v] verbose mode, allows print more information to console");
 	       System.out.println("[-s] print statistic in the end");
-	       System.out.println("[-r] removing often words from all documents from output dataset");
+	       System.out.println("[-r] removing often words from all documents from output dataset, default is false");
 	       System.out.println("[-h] help");
 		}
 		return this.mHelp;
