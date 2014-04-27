@@ -20,6 +20,12 @@ public class ClassVisitor extends VoidVisitorAdapter {
 	
 	private String mCode;
 	
+	private boolean toRemoveOftenWords = false;
+	
+	public void setRemovingOftenWords(boolean toRemove){
+		this.toRemoveOftenWords = toRemove;
+	}
+	
 	public void reset(){
 		this.mCode = null;
 	}
@@ -38,7 +44,7 @@ public class ClassVisitor extends VoidVisitorAdapter {
 			final String originalCode = n.toString();
 			final String noJavaCode = SourceCode.removeSet(SourceCode.removeSeparators(originalCode), StopWords.JAVA, false); //Not ignore case because of INTT - it won't separate words 
 			String[] tokens = SourceCode.tokenize(noJavaCode);
-			if(tokens != null)
+			if(tokens != null && toRemoveOftenWords)
 				tokens = SourceCode.removeSet(SourceCode.representationOf(" ", tokens), StopWords.OFTEN, true).split(" ");
 			if (tokens != null && tokens.length > MIN_TOKENS_COUNT) {
 				updateTermFrequency(tokens);

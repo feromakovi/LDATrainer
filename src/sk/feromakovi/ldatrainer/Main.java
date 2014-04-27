@@ -41,6 +41,9 @@ public class Main implements FileFinderListener{
 	@Option(name="-s", usage = "print statistic in the end")     
     private boolean mStatistic = false;
 	
+	@Option(name="-r", usage = "removing often words from all documents from output dataset")     
+    private boolean mRemoveOftenWords = false;
+	
 	@Option(name="-h", usage = "help")     
     private boolean mHelp = false;
 	
@@ -72,6 +75,7 @@ public class Main implements FileFinderListener{
 			out.createNewFile();
 		}catch(Exception e){e.printStackTrace();}		
 		
+		this.mClassVisitor.setRemovingOftenWords(mRemoveOftenWords);
 		FileFinder fileFinder = new FileFinder(FileFinder.PATTERN_JAVA);
     	fileFinder.setRecursive(true);
     	fileFinder.setFileFinderListener(this);
@@ -138,6 +142,7 @@ public class Main implements FileFinderListener{
 	       System.out.println("[-o] output file");
 	       System.out.println("[-v] verbose mode, allows print more information to console");
 	       System.out.println("[-s] print statistic in the end");
+	       System.out.println("[-r] removing often words from all documents from output dataset");
 	       System.out.println("[-h] help");
 		}
 		return this.mHelp;
